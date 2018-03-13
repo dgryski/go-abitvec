@@ -39,7 +39,7 @@ func (b Vec) ASet(bit uint32) {
 	var old uint64
 	for {
 		old = atomic.LoadUint64(addr)
-		if atomic.CompareAndSwapUint64(addr, old, old|set) {
+		if (old & set != 0) || atomic.CompareAndSwapUint64(addr, old, old|set) {
 			break
 		}
 	}
