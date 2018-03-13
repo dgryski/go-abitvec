@@ -12,11 +12,11 @@ func New(size uint32) Vec {
 }
 
 // Get returns the given bit
-func (b Vec) Get(bit uint32) uint {
+func (b Vec) Get(bit uint32) bool {
 	shift := bit % 64
 	bb := b[bit/64]
 	bb &= (1 << shift)
-	return uint(bb >> shift)
+	return bb != 0
 }
 
 // Set sets the given bit
@@ -25,11 +25,11 @@ func (b Vec) Set(bit uint32) {
 }
 
 // AGet atomically returns the given bit
-func (b Vec) AGet(bit uint32) uint {
+func (b Vec) AGet(bit uint32) bool {
 	shift := bit % 64
 	bb := atomic.LoadUint64(&b[bit/64])
 	bb &= (1 << shift)
-	return uint(bb >> shift)
+	return bb != 0
 }
 
 // ASet atomically sets the given bit
